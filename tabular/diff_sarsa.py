@@ -1,9 +1,4 @@
 import numpy as np
-import gym
-import gym_accesscontrol
-from matplotlib import pyplot as plt
-import random
-from pprint import pprint
 
 
 class TabularDiffSarsa():
@@ -12,7 +7,7 @@ class TabularDiffSarsa():
         if env == None:
             print("Environment is None! Exiting...")
             exit(1)
-        self.env = gym.make(env)
+        self.env = env
 
         # Hyperparams
         self.alpha = alpha
@@ -33,20 +28,21 @@ class TabularDiffSarsa():
             return np.random.randint(0, self.env.action_space.n)
 
 
-    def train(self, n_steps=1000000):
+    def train(self, n_steps=2000000):
         # Reset environment
         state = self.env.reset()
-        action = self.epsilon_greedy(state)
         # Add state to Q table if not there
         if state not in self.Q.keys(): self.Q[state] = np.zeros(self.env.action_space.n).tolist()
+        # Choose action
+        action = self.epsilon_greedy(state)
         # Start learning
         for _ in range(n_steps):
             # Take action
             next_state, reward, _, _ = self.env.step(action)
-            # Choose next action
-            next_action = self.epsilon_greedy(next_state)
             # Add next state with zero values to Q table if not there
             if next_state not in self.Q.keys(): self.Q[next_state] = np.zeros(self.env.action_space.n).tolist()
+            # Choose next action
+            next_action = self.epsilon_greedy(next_state)
             # Learn
             delta = reward - self.R + self.Q[next_state][next_action] - self.Q[state][action]
             self.R += self.beta * delta
@@ -54,10 +50,3 @@ class TabularDiffSarsa():
             # Transition
             state = next_state
             action = next_action
-
-
-if __name__ == '__main__':
-    agent = TabularDiffSarsa(env="AccessControl-v0")
-    agent.train(n_steps=20000000)
-    pprint(agent.Q)
-    pprint(agent.R)

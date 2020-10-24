@@ -12,7 +12,7 @@ class TabularDiffQLearning():
         if env == None:
             print("Environment is None! Exiting...")
             exit(1)
-        self.env = gym.make(env)
+        self.env = env
 
         # Hyperparams
         self.alpha = alpha
@@ -33,7 +33,7 @@ class TabularDiffQLearning():
             return np.random.randint(0, self.env.action_space.n)
 
 
-    def train(self, n_steps=1000000):
+    def train(self, n_steps=2000000):
         # Reset environment
         state = self.env.reset()
         # Add state to Q table if not there
@@ -52,10 +52,3 @@ class TabularDiffQLearning():
             self.Q[state][action] += self.alpha * delta
             # Transition
             state = next_state
-
-
-if __name__ == '__main__':
-    agent = TabularDiffQLearning(env="AccessControl-v0")
-    agent.train(n_steps=20000000)
-    pprint(agent.Q)
-    pprint(agent.R)
