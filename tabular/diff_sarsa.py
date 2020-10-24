@@ -22,7 +22,7 @@ class TabularDiffSarsa():
 
     
     def epsilon_greedy(self, state): 
-        if random.random() > self.epsilon: 
+        if np.random.sample() > self.epsilon: 
             return np.argmax(self.Q[state])
         else: 
             return np.random.randint(0, self.env.action_space.n)

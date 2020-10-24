@@ -1,9 +1,4 @@
 import numpy as np
-import gym
-import gym_accesscontrol
-from matplotlib import pyplot as plt
-import random
-from pprint import pprint
 
 
 class TabularDiffQLearning():
@@ -27,7 +22,7 @@ class TabularDiffQLearning():
 
     
     def epsilon_greedy(self, state): 
-        if random.random() > self.epsilon: 
+        if np.random.sample() > self.epsilon: 
             return np.argmax(self.Q[state])
         else: 
             return np.random.randint(0, self.env.action_space.n)
