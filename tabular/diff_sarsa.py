@@ -2,7 +2,7 @@ import numpy as np
 
 
 class TabularDiffSarsa():
-    def __init__(self, env=None, alpha=0.01, beta=0.01, epsilon=0.1):
+    def __init__(self, env=None, alpha=0.01, eta=0.01, epsilon=0.1):
         # Environment
         if env == None:
             print("Environment is None! Exiting...")
@@ -11,7 +11,7 @@ class TabularDiffSarsa():
 
         # Hyperparams
         self.alpha = alpha
-        self.beta = beta
+        self.eta = eta
         self.epsilon = epsilon
 
         # Value function
@@ -45,8 +45,8 @@ class TabularDiffSarsa():
             next_action = self.epsilon_greedy(next_state)
             # Learn
             delta = reward - self.R + self.Q[next_state][next_action] - self.Q[state][action]
-            self.R += self.beta * delta
             self.Q[state][action] += self.alpha * delta
+            self.R += self.eta * self.alpha * delta
             # Transition
             state = next_state
             action = next_action

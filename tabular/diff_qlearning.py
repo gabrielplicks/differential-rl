@@ -2,7 +2,7 @@ import numpy as np
 
 
 class TabularDiffQLearning():
-    def __init__(self, env=None, alpha=0.01, beta=0.01, epsilon=0.1):
+    def __init__(self, env=None, alpha=0.01, eta=0.01, epsilon=0.1):
         # Environment
         if env == None:
             print("Environment is None! Exiting...")
@@ -11,7 +11,7 @@ class TabularDiffQLearning():
 
         # Hyperparams
         self.alpha = alpha
-        self.beta = beta
+        self.eta = eta
         self.epsilon = epsilon
 
         # Value function
@@ -43,7 +43,7 @@ class TabularDiffQLearning():
             if next_state not in self.Q.keys(): self.Q[next_state] = np.zeros(self.env.action_space.n).tolist()
             # Learn
             delta = reward - self.R + np.max(self.Q[next_state]) - self.Q[state][action]
-            self.R += self.beta * delta
             self.Q[state][action] += self.alpha * delta
+            self.R += self.eta * self.alpha * delta
             # Transition
             state = next_state
