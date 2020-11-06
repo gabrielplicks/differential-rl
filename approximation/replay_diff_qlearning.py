@@ -42,7 +42,7 @@ class QNet(nn.Module):
         return self.nn(x)
 
 
-class Agent:
+class DiffQNetworkAgent:
     def __init__(self, env=None, alpha=0.01, eta=0.01, epsilon=0.1, rand_seed=22):
         # Set randoms seed
         np.random.seed(rand_seed)
@@ -68,7 +68,7 @@ class Agent:
         self.memory_size = 10000
         self.memory = ReplayMemory(self.memory_size, rand_seed)
         self.target_update_interval = 128
-        self.batch_size = 128
+        self.batch_size = 256
 
         # Model
         self.qnet = QNet(self.n_features, self.n_actions)
