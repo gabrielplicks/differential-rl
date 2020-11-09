@@ -43,7 +43,8 @@ class QNet(nn.Module):
 
 
 class DiffQNetworkAgent:
-    def __init__(self, env=None, alpha=0.01, eta=0.01, epsilon=0.1, rand_seed=22):
+    def __init__(self, env=None, alpha=0.01, eta=0.01, epsilon=0.1, rand_seed=22, 
+                    update_interval=256, batch_size=64, memory_size=10000):
         # Set randoms seed
         np.random.seed(rand_seed)
 
@@ -65,16 +66,16 @@ class DiffQNetworkAgent:
         self.R_freeze = None
 
         # Experience replay
-        self.memory_size = 10000
+        self.memory_size = memory_size
         self.memory = ReplayMemory(self.memory_size, rand_seed)
-        self.target_update_interval = 128
-        self.batch_size = 256
+        self.target_update_interval = update_interval
+        self.batch_size = batch_size
 
         # Model
         self.qnet = QNet(self.n_features, self.n_actions)
         self.qnet_target = QNet(self.n_features, self.n_actions)
         self.qnet_target.load_state_dict(self.qnet.state_dict())
-        self.optimizer = torch.optim.Adam(self.qnet.parameters(), lr=self.alpha)
+        self.optimizer = torch.optim.SGD(params=self.qnet.parameters(), lr=self.alpha)
 
 
     def epsilon_greedy(self, state):
