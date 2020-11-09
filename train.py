@@ -47,14 +47,14 @@ if __name__ == '__main__':
             # Start training
             print('Running {}...'.format(run))
             qnet, qnet_target, R, rewards, avg_rewards, losses = agent.train(n_steps=args.steps)
-            np.save('{0}/losses_{1}_{2}_{3}_{4}_{5}.npy'.format(args.out, args.alpha, args.eta, args.update_interval, args.batch_size, run), losses, allow_pickle=True)
-            np.save('{0}/rewards_{1}_{2}_{3}_{4}_{5}.npy'.format(args.out, args.alpha, args.eta, args.update_interval, args.batch_size, run), rewards, allow_pickle=True)
-            np.save('{0}/avg_rewards_{1}_{2}_{3}_{4}_{5}.npy'.format(args.out, args.alpha, args.eta, args.update_interval, args.batch_size, run), avg_rewards, allow_pickle=True)
+            np.save('/content/drive/My Drive/results/{0}/losses_{1}_{2}_{3}_{4}_{5}.npy'.format(args.out, args.alpha, args.eta, args.update_interval, args.batch_size, run), losses, allow_pickle=True)
+            np.save('/content/drive/My Drive/results/{0}/rewards_{1}_{2}_{3}_{4}_{5}.npy'.format(args.out, args.alpha, args.eta, args.update_interval, args.batch_size, run), rewards, allow_pickle=True)
+            np.save('/content/drive/My Drive/results/{0}/avg_rewards_{1}_{2}_{3}_{4}_{5}.npy'.format(args.out, args.alpha, args.eta, args.update_interval, args.batch_size, run), avg_rewards, allow_pickle=True)
         elif args.agent == 'TabularDiffQLearning': 
             agent = TabularDiffQLearning(env=env, alpha=args.alpha, eta=args.eta, epsilon=0.1, rand_seed=run)
             # Start training
             print('Running {}...'.format(run))
-            Q, R, rewards, avg_rewards = agent.train(n_steps=n_steps)
+            Q, R, rewards, avg_rewards = agent.train(n_steps=args.steps)
             np.save('{0}/rewards_{1}_{2}_{3}.npy'.format(args.out, args.alpha, args.eta, run), rewards, allow_pickle=True)
             np.save('{0}/avg_rewards_{1}_{2}_{3}.npy'.format(args.out, args.alpha, args.eta, run), avg_rewards, allow_pickle=True)
         else:
